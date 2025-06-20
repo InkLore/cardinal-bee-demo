@@ -1,0 +1,28 @@
+API key
+
+7fce0965-5eb4-4240-b386-6ba1c44e9916
+
+Purpose
+
+API trading
+
+API key name
+
+Demo Key
+
+IP address allowlist (optional)
+
+Permissions
+
+Read
+
+Secret key
+
+FE037868FFE58DAA86ECE2EE4E63A053
+
+
+
+
+curl -X GET "https://web3.okx.com/api/v5/mktplace/nft/ordinals/collections" \
+  -H 'OK-ACCESS-KEY: 7fce0965-5eb4-4240-b386-6ba1c44e9916' \
+  -d "limit=1"

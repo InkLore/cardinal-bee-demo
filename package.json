@@ -1,0 +1,27 @@
+{
+  "name": "cardinal-bee-demo",
+  "version": "1.0.0",
+  "description": "Ordinal Hive Technical Interview",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/InkLore/cardinal-bee-demo.git"
+  },
+  "keywords": [
+    "API"
+  ],
+  "author": "Noah Batchelor",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/InkLore/cardinal-bee-demo/issues"
+  },
+  "homepage": "https://github.com/InkLore/cardinal-bee-demo#readme",
+  "dependencies": {
+    "axios": "^1.10.0",
+    "express": "^5.1.0",
+    "ordiscan": "^1.2.0"
+  }
+}
