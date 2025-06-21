@@ -8,8 +8,8 @@ Installations of Node, NPM, Express, and Axios required.
 
 ## Examples
 The current app is hosted using Render on https://cardinal-bee-demo.onrender.com/. Recommended examples include:
-- Fast: https://cardinal-bee-demo.onrender.com/collections/xillions
-- Slower: https://cardinal-bee-demo.onrender.com/collections?limit=100&sort_by=volume
+- Fast: https://cardinal-bee-demo.onrender.com/collections/xillions -> should return some aggregate data about the xillions collection (chosen due to it having more metadata than some of the other collections).
+- Slower: https://cardinal-bee-demo.onrender.com/collections?limit=100&sort_by=volume -> should return a list of 100 collections sorted by volume (sorting done after collection) each of which with relevant metadata such as with price, volume, etc.
 - It is recommended that the collections API be tested with the optional limit included to avoid timing out the underlying Magic Eden API.
 
 ## Known Issues/Tradeoffs
