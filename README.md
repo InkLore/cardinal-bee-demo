@@ -7,9 +7,14 @@ Note: the APIs offered by OKX is not legally licensed in my state, and the API o
 Installations of Node, NPM, Express, and Axios required.
 
 ## Examples
-http://localhost:3000/collections?limit=100&sort_by=floor_price&min_volume=5000000000
-
-http://localhost:3000/collections/xillions
+The current app is hosted using Render on https://cardinal-bee-demo.onrender.com/. Recommended examples include:
+- Fast: https://cardinal-bee-demo.onrender.com/collections/xillions
+- Slower: https://cardinal-bee-demo.onrender.com/collections?limit=100&sort_by=volume
+- It is recommended that the collections API be tested with the optional limit included to avoid timing out the underlying Magic Eden API.
 
 ## Known Issues/Tradeoffs
-TODO
+Several quick TODOs include
+- Caching (Redis/JSON being the recommended options)
+- Parallelization of API calls in `collections/` route
+- Error handling isn't as robust as it ought to be
+- Optional 3rd route for rankings not yet implemented

@@ -164,8 +164,6 @@ app.get('/collections', async (req, res) => {
 });
 
 
-
-
 /*
 `GET /collections/:slug`
 
