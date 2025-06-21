@@ -12,18 +12,9 @@ app.listen(PORT, () => {
 });
 
 
-app.get("/status", (request, response) => {
-    const status = {
-        "Status": "Running"
-    };
-    
-    response.send(status);
-});
-
-
 /*
-    `GET /collections`
-    
+`GET /collections`
+
 Returns a list of collections with:
 * collection_name
 * floor_price
@@ -34,9 +25,18 @@ Returns a list of collections with:
 Should support filtering by:
 * min_volume
 * sort_by (e.g. floor price or volume)
+
+example symbol stats as returned by :
+{
+    symbol: 'xillions',
+    floorPrice: 10000000,
+    listedCount: 68,
+    volumeAll: 90000000
+}
 */
 app.get('/collections', async (req, res) => {
     try {
+        // TODO refactor unnecessary catch all block
         const limit_param = req.query.limit;
         const min_volume_param = req.query.min_volume;
         const sort_by_param = req.query.sort_by;
@@ -91,7 +91,8 @@ app.get('/collections', async (req, res) => {
         let symbol_counter = 0;
         let symbols = [];
         for (const collection of collections) {
-            //TODO parallelize these requests for efficiency
+            // TODO parallelize these requests for efficiency
+            // TODO make API wait if 429 encountered
             let symb_options = {
                 method: 'GET',
                 url: `https://api-mainnet.magiceden.dev/v2/collections/${collection.symbol}/stats`,
@@ -162,16 +163,6 @@ app.get('/collections', async (req, res) => {
     }
 });
 
-/* 
-example symbol stats:
-
-{
-    symbol: 'xillions',
-    floorPrice: 10000000,
-    listedCount: 68,
-    volumeAll: 90000000
-}
-*/
 
 
 
@@ -183,10 +174,59 @@ Returns detailed stats for a single collection by slug or symbol.
 TODO use Magic Eden's 
 - https://api-mainnet.magiceden.dev/v2/collections/{symbol}/stats
 - https://api-mainnet.magiceden.dev/v2/collections/{symbol}/holder_stats
+- https://api-mainnet.magiceden.dev/v2/collections/{symbol}/leaderboard
 */ 
-
+app.get('/collections/:slug', async (req, res) => {
+    try {
+        const slug = req.params.slug;
+        
+        if (
+            (slug == null) ||
+            !((typeof slug == 'string') || (slug instanceof String))
+        ) {
+            return res.status(400).json({ error: 'slug must be a valid str.' });
+        }
+        
+        const stats_options = {
+            method: 'GET',
+            url: `https://api-mainnet.magiceden.dev/v2/collections/${slug}/stats`,
+            headers: {accept: 'application/json'}
+        };
+        const holder_stats_options = {
+            method: 'GET',
+            url: `https://api-mainnet.magiceden.dev/v2/collections/${slug}/holder_stats`,
+            headers: {accept: 'application/json'}
+        };
+        const leaderboard_options = {
+            method: 'GET',
+            url: `https://api-mainnet.magiceden.dev/v2/collections/${slug}/leaderboard`,
+            headers: {accept: 'application/json'}
+        };
+        
+        
+        const [stats, holder_stats, leaderboard] = await Promise.all([
+            axios.request(stats_options),
+            axios.request(holder_stats_options),
+            axios.request(leaderboard_options)
+        ])
+        
+        // TODO find a better way to merge relevant data together
+        let data = { 
+            ...stats.data,
+            ...holder_stats.data, 
+            ...leaderboard.data
+        };
+        
+        res.json(data); 
+    } catch (error) {
+        console.error('Error fetching data:', error.message);
+        res.status(500).json({ error: 'Failed to fetch posts' });
+    }
+});
 
 /*
 (Optional) `GET /rankings`
 Returns top 10 collections by volume or floor price.
+
+TODO this will basically be a variant of the default collections just with stricter filtering
 */
